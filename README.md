@@ -70,6 +70,24 @@ npx serve www -p 4000
 - **Build System**: wasm-pack for seamless Rust-to-WebAssembly compilation
 - **Performance**: WebAssembly ensures near-native speed for game calculations
 
+## Testing
+
+The project includes comprehensive test coverage for all game logic:
+
+### Unit Tests
+```bash
+cargo test
+```
+Runs 11 Rust unit tests covering game state, move validation, dice logic, and edge cases.
+
+### WASM Browser Tests
+```bash
+wasm-pack test --chrome --headless
+# or
+wasm-pack test --firefox --headless
+```
+Runs 3 WASM-specific tests in a headless browser environment to verify WebAssembly functionality.
+
 ## Game Strategy Tips
 
 - **Early Game**: Focus on flipping high-value tiles (7, 8, 9) when possible

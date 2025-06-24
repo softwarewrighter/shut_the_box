@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Build the project**: `./build.sh` - Compiles Rust to WASM and outputs to www/ directory
 - **Run the game**: `./run.sh` - Starts basic-http-server on port 4000 and opens browser
 - **Alternative serving**: `basic-http-server www` or `python -m http.server 4000 --directory www`
-- **Tests**: `cargo test` for Rust unit tests, `wasm-pack test --chrome --headless` for WASM tests
+- **Tests**: `cargo test` for Rust unit tests (11 tests), `wasm-pack test --chrome --headless` or `wasm-pack test --firefox --headless` for WASM browser tests (3 tests)
 
 ## Architecture Overview
 
@@ -29,8 +29,7 @@ This is a 3D "Shut the Box" dice game built with Rust/WASM backend and Three.js 
 
 ### File Structure
 
-- `src/lib.rs` - Core game logic and WASM bindings
-- `src/main.rs` - Unused binary entry point (library crate)
+- `src/lib.rs` - Core game logic, WASM bindings, and comprehensive test suite
 - `www/` - Web assets including generated WASM files
 - `build.sh` - wasm-pack build script
 - `run.sh` - Development server launcher
