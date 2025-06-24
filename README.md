@@ -44,7 +44,7 @@ A stunning 3D version of the classic dice game "Shut the Box" built with Rust/WA
 
 2. **Serve the game**:
    ```bash
-   basic-http-server www
+   ./run.sh
    ```
 
 3. **Play the game**: Open your browser to `http://localhost:4000`
@@ -52,6 +52,9 @@ A stunning 3D version of the classic dice game "Shut the Box" built with Rust/WA
 ### Alternative Serving
 You can also use any static file server:
 ```bash
+# Using basic-http-server directly
+basic-http-server www
+
 # Using Python
 python -m http.server 4000 --directory www
 
