@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shut the Box</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #2a2a2a;
+            color: white;
+            overflow: hidden;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        #score {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        #dice-result {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        #message {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        #selected-tiles {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        /* Splash Screen Styles */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #splash-screen.hidden {
+            display: none;
+        }
+
+        #splash-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* 3D Jellybean Button Styles */
+        .jellybean-btn {
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 50px;
+            padding: 20px 40px;
+            margin: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 8px 16px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.2),
+                inset 0 -2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jellybean-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 24px rgba(0,0,0,0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3),
+                inset 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        .jellybean-btn:active {
+            transform: translateY(1px);
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 1px 2px rgba(255,255,255,0.2),
+                inset 0 -1px 2px rgba(0,0,0,0.3);
+        }
+
+        .jellybean-btn.instructions {
+            background: linear-gradient(145deg, #2196F3, #1976D2);
+        }
+
+        /* Instructions Dialog Styles */
+        #instructions-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        #instructions-dialog.hidden {
+            display: none;
+        }
+
+        #instructions-content {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        #instructions-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        #instructions-close:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        #instructions-content h2 {
+            color: #ffd700;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        #instructions-content h3 {
+            color: #4CAF50;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        #instructions-content ul {
+            margin-left: 20px;
+        }
+
+        #instructions-content li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 id="splash-title">Shut the Box</h1>
+        <button class="jellybean-btn" id="play-btn">Play Game</button>
+        <button class="jellybean-btn instructions" id="instructions-btn">Instructions</button>
+    </div>
+
+    <!-- Instructions Dialog -->
+    <div id="instructions-dialog" class="hidden">
+        <div id="instructions-content">
+            <button id="instructions-close">&times;</button>
+            <h2>How to Play Shut the Box</h2>
+            
+            <h3>Objective</h3>
+            <p>Flip down all numbered tiles (1-9) to achieve a perfect score of 0!</p>
+            
+            <h3>Game Rules</h3>
+            <ul>
+                <li><strong>Rolling Dice:</strong> When tiles 7, 8, or 9 are still up, roll two dice. When only tiles 1-6 remain, roll one die.</li>
+                <li><strong>Making Moves:</strong> Select any combination of upright tiles that sum exactly to your dice total.</li>
+                <li><strong>Scoring:</strong> Your final score is the sum of all tiles still standing when the game ends.</li>
+                <li><strong>Game Over:</strong> The game ends when no combination of remaining tiles can match your dice roll.</li>
+            </ul>
+            
+            <h3>How to Play</h3>
+            <ul>
+                <li>Click "Roll Dice" to roll the dice</li>
+                <li>Click on numbered tiles to select them (they'll turn yellow)</li>
+                <li>Make sure your selected tiles sum to the dice total</li>
+                <li>Click "Submit Move" to flip down the selected tiles</li>
+                <li>Continue until all tiles are down or no valid moves remain</li>
+            </ul>
+            
+            <h3>Strategy Tips</h3>
+            <ul>
+                <li>Focus on flipping high-value tiles (7, 8, 9) early when possible</li>
+                <li>Look for combinations that use multiple tiles efficiently</li>
+                <li>Plan ahead for the single-die phase when only tiles 1-6 remain</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <div id="ui-overlay">
+            <div id="score">Score: 0</div>
+            <div id="dice-result"></div>
+            <div id="message"></div>
+            <button id="roll-btn">Roll Dice</button>
+            <button id="submit-btn" disabled>Submit Move</button>
+            <button id="reset-btn">New Game</button>
+            <div id="selected-tiles">Selected: None</div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
