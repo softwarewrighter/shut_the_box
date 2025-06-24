@@ -203,6 +203,7 @@ impl Game {
     }
 }
 
+#[cfg(not(test))]
 #[wasm_bindgen(start)]
 pub fn main() {
     web_sys::console::log_1(&"Shut the Box WASM module loaded!".into());
@@ -211,8 +212,12 @@ pub fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use wasm_bindgen_test::*;
+
+    wasm_bindgen_test_configure!(run_in_browser);
 
     #[test]
+    #[wasm_bindgen_test]
     fn test_new_game() {
         let game = Game::new();
         assert_eq!(game.get_tiles(), vec![1; 9]);
@@ -222,6 +227,7 @@ mod tests {
     }
 
     #[test]
+    #[wasm_bindgen_test]
     fn test_default() {
         let game = Game::default();
         assert_eq!(game.get_tiles(), vec![1; 9]);
@@ -263,6 +269,7 @@ mod tests {
     }
 
     #[test]
+    #[wasm_bindgen_test]
     fn test_make_move() {
         let mut game = Game::new();
         game.set_dice_values(2, 3); // sum = 5
