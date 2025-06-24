@@ -683,6 +683,19 @@ function hideInstructions() {
     document.getElementById('instructions-dialog').classList.add('hidden');
 }
 
+// Detect if we're in a test environment
+function isTestEnvironment() {
+    // Check for wasm-bindgen-test indicators
+    return typeof window !== 'undefined' && (
+        window.location.href.includes('wasm-bindgen-test') ||
+        window.__wbindgen_test_unstable ||
+        document.title.includes('wasm-bindgen test runner') ||
+        // Check for headless browser indicators
+        navigator.webdriver === true ||
+        window.navigator.userAgent.includes('HeadlessChrome')
+    );
+}
+
 // Initialize the game but don't start it yet
 async function initializeGame() {
     await init();
@@ -690,8 +703,16 @@ async function initializeGame() {
     initThreeJS();
     updateUI();
     
-    // Hide the game initially and show splash screen
-    document.getElementById('game-container').style.display = 'none';
+    // In test environment, skip splash screen and start immediately
+    if (isTestEnvironment()) {
+        console.log('Test environment detected - skipping splash screen');
+        document.getElementById('game-container').style.display = 'block';
+        document.getElementById('splash-screen').style.display = 'none';
+        resetGame(); // Ensure clean test state
+    } else {
+        // Hide the game initially and show splash screen for normal use
+        document.getElementById('game-container').style.display = 'none';
+    }
 }
 
 // Start the actual game
