@@ -42,12 +42,12 @@ A stunning 3D version of the classic dice game "Shut the Box" built with Rust/WA
    ./build.sh
    ```
 
-2. **Serve the game**:
+2. **Run the game** (starts server and opens browser):
    ```bash
    ./run.sh
    ```
 
-3. **Play the game**: Open your browser to `http://localhost:4000`
+That's it! The game will automatically open in your browser.
 
 ### Alternative Serving
 You can also use any static file server:
