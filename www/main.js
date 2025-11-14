@@ -7,6 +7,100 @@ let dice = [];
 let selectedTiles = new Set();
 let raycaster, mouse;
 
+// Score Persistence System
+const STORAGE_KEY = 'shutTheBoxData';
+
+function loadGameData() {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+        return JSON.parse(data);
+    }
+    return {
+        gameHistory: [],
+        stats: {
+            gamesPlayed: 0,
+            perfectGames: 0,
+            bestScore: null,
+            averageScore: 0,
+            lastPlayed: null
+        }
+    };
+}
+
+function saveGameResult(score) {
+    const data = loadGameData();
+    const isWin = score === 0;
+    const gameResult = {
+        score: score,
+        timestamp: new Date().toISOString(),
+        isWin: isWin
+    };
+
+    // Add to history (keep last 100 games)
+    data.gameHistory.unshift(gameResult);
+    if (data.gameHistory.length > 100) {
+        data.gameHistory = data.gameHistory.slice(0, 100);
+    }
+
+    // Update statistics
+    data.stats.gamesPlayed++;
+    if (isWin) {
+        data.stats.perfectGames++;
+    }
+    if (data.stats.bestScore === null || score < data.stats.bestScore) {
+        data.stats.bestScore = score;
+    }
+
+    // Calculate average score
+    const totalScore = data.gameHistory.reduce((sum, game) => sum + game.score, 0);
+    data.stats.averageScore = Math.round((totalScore / data.gameHistory.length) * 10) / 10;
+    data.stats.lastPlayed = gameResult.timestamp;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    return data;
+}
+
+function clearGameData() {
+    if (confirm('Are you sure you want to clear all game history and statistics?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        updateStatsDisplay();
+        return true;
+    }
+    return false;
+}
+
+function updateStatsDisplay() {
+    const data = loadGameData();
+    const stats = data.stats;
+
+    document.getElementById('games-played').textContent = stats.gamesPlayed;
+    document.getElementById('perfect-games').textContent = stats.perfectGames;
+    document.getElementById('best-score').textContent = stats.bestScore !== null ? stats.bestScore : '-';
+    document.getElementById('average-score').textContent = stats.averageScore || '-';
+
+    // Update win rate
+    const winRate = stats.gamesPlayed > 0
+        ? Math.round((stats.perfectGames / stats.gamesPlayed) * 100)
+        : 0;
+    document.getElementById('win-rate').textContent = `${winRate}%`;
+
+    // Update recent games list
+    const recentGamesContainer = document.getElementById('recent-games');
+    if (data.gameHistory.length === 0) {
+        recentGamesContainer.innerHTML = '<div style="color: #888;">No games played yet</div>';
+    } else {
+        const recentGames = data.gameHistory.slice(0, 10);
+        recentGamesContainer.innerHTML = recentGames.map(game => {
+            const date = new Date(game.timestamp);
+            const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            const scoreClass = game.isWin ? 'perfect-score' : 'normal-score';
+            const icon = game.isWin ? '🏆' : '🎲';
+            return `<div class="game-entry ${scoreClass}">${icon} Score: ${game.score} - ${dateStr}</div>`;
+        }).join('');
+    }
+}
+
 function initThreeJS() {
     // Scene setup
     scene = new THREE.Scene();
@@ -623,7 +717,7 @@ function resetGame() {
 function updateUI() {
     const score = game.get_score();
     document.getElementById('score').textContent = `Score: ${score}`;
-    
+
     const message = document.getElementById('message');
     if (game.is_game_over()) {
         if (score === 0) {
@@ -635,7 +729,11 @@ function updateUI() {
         }
         document.getElementById('roll-btn').disabled = true;
         document.getElementById('submit-btn').disabled = true;
-        
+
+        // Save game result to localStorage
+        saveGameResult(score);
+        updateStatsDisplay();
+
         // Log final game state
         const upTiles = game.get_tiles().map((up, i) => up ? i + 1 : null).filter(x => x !== null);
         console.log(`Game ended with tiles still up: [${upTiles.join(', ')}]`);
@@ -696,13 +794,25 @@ function isTestEnvironment() {
     );
 }
 
+// Statistics panel management
+function toggleStatsPanel() {
+    const panel = document.getElementById('stats-panel');
+    panel.classList.toggle('hidden');
+    updateStatsDisplay();
+}
+
+function hideStatsPanel() {
+    document.getElementById('stats-panel').classList.add('hidden');
+}
+
 // Initialize the game but don't start it yet
 async function initializeGame() {
     await init();
     game = new Game();
     initThreeJS();
     updateUI();
-    
+    updateStatsDisplay(); // Load and display stats on init
+
     // In test environment, skip splash screen and start immediately
     if (isTestEnvironment()) {
         console.log('Test environment detected - skipping splash screen');
@@ -744,6 +854,18 @@ document.getElementById('instructions-dialog').addEventListener('click', functio
 document.getElementById('roll-btn').addEventListener('click', rollDice);
 document.getElementById('submit-btn').addEventListener('click', submitMove);
 document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+// Statistics panel event listeners
+document.getElementById('stats-btn').addEventListener('click', toggleStatsPanel);
+document.getElementById('stats-close').addEventListener('click', hideStatsPanel);
+document.getElementById('clear-stats-btn').addEventListener('click', clearGameData);
+
+// Click outside stats panel to close
+document.getElementById('stats-panel').addEventListener('click', function(event) {
+    if (event.target === this) {
+        hideStatsPanel();
+    }
+});
 
 // Initialize game on load
 initializeGame();

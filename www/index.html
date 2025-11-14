@@ -205,6 +205,135 @@
             margin-bottom: 8px;
             line-height: 1.4;
         }
+
+        /* Statistics Panel Styles */
+        #stats-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        #stats-panel.hidden {
+            display: none;
+        }
+
+        #stats-content {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        #stats-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        #stats-close:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        #stats-content h2 {
+            color: #ffd700;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        #stats-content h3 {
+            color: #4CAF50;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            color: #ffd700;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        #recent-games {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .game-entry {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+        }
+
+        .game-entry.perfect-score {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 3px solid #4CAF50;
+        }
+
+        .game-entry.normal-score {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #888;
+        }
+
+        #clear-stats-btn {
+            background: #f44336;
+            width: 100%;
+        }
+
+        #clear-stats-btn:hover {
+            background: #d32f2f;
+        }
+
+        #stats-btn {
+            background: #2196F3;
+        }
+
+        #stats-btn:hover {
+            background: #1976D2;
+        }
     </style>
 </head>
 <body>
@@ -220,10 +349,10 @@
         <div id="instructions-content">
             <button id="instructions-close">&times;</button>
             <h2>How to Play Shut the Box</h2>
-            
+
             <h3>Objective</h3>
             <p>Flip down all numbered tiles (1-9) to achieve a perfect score of 0!</p>
-            
+
             <h3>Game Rules</h3>
             <ul>
                 <li><strong>Rolling Dice:</strong> When tiles 7, 8, or 9 are still up, roll two dice. When only tiles 1-6 remain, roll one die.</li>
@@ -231,7 +360,7 @@
                 <li><strong>Scoring:</strong> Your final score is the sum of all tiles still standing when the game ends.</li>
                 <li><strong>Game Over:</strong> The game ends when no combination of remaining tiles can match your dice roll.</li>
             </ul>
-            
+
             <h3>How to Play</h3>
             <ul>
                 <li>Click "Roll Dice" to roll the dice</li>
@@ -240,13 +369,51 @@
                 <li>Click "Submit Move" to flip down the selected tiles</li>
                 <li>Continue until all tiles are down or no valid moves remain</li>
             </ul>
-            
+
             <h3>Strategy Tips</h3>
             <ul>
                 <li>Focus on flipping high-value tiles (7, 8, 9) early when possible</li>
                 <li>Look for combinations that use multiple tiles efficiently</li>
                 <li>Plan ahead for the single-die phase when only tiles 1-6 remain</li>
             </ul>
+        </div>
+    </div>
+
+    <!-- Statistics Panel -->
+    <div id="stats-panel" class="hidden">
+        <div id="stats-content">
+            <button id="stats-close">&times;</button>
+            <h2>Statistics</h2>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Games Played</div>
+                    <div class="stat-value" id="games-played">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Perfect Games</div>
+                    <div class="stat-value" id="perfect-games">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Best Score</div>
+                    <div class="stat-value" id="best-score">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value" id="win-rate">0%</div>
+                </div>
+                <div class="stat-box" style="grid-column: 1 / -1;">
+                    <div class="stat-label">Average Score</div>
+                    <div class="stat-value" id="average-score">-</div>
+                </div>
+            </div>
+
+            <h3>Recent Games (Last 10)</h3>
+            <div id="recent-games">
+                <div style="color: #888;">No games played yet</div>
+            </div>
+
+            <button id="clear-stats-btn">Clear All Statistics</button>
         </div>
     </div>
 
@@ -258,6 +425,7 @@
             <button id="roll-btn">Roll Dice</button>
             <button id="submit-btn" disabled>Submit Move</button>
             <button id="reset-btn">New Game</button>
+            <button id="stats-btn">Statistics</button>
             <div id="selected-tiles">Selected: None</div>
         </div>
     </div>
