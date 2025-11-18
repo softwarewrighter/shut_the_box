@@ -166,7 +166,7 @@ flowchart TD
     VALIDATE -->|No| REJECT[Return false]
     VALIDATE -->|Yes| FLIP[Flip Tiles Down]
     FLIP --> RESET[Reset current_sum]
-    RESET --> CHECK_WIN{All Tiles<br/>Down?}
+    RESET --> CHECK_WIN{All Tiles Down?}
     CHECK_WIN -->|Yes| WIN[Set game_over=true]
     CHECK_WIN -->|No| CONTINUE[Continue game]
     WIN --> SUCCESS[Return true]
@@ -411,6 +411,6 @@ wasm-bindgen-test = "0.3"
 ---
 
 **Related Pages:**
-- [Architecture Overview](Architecture.md)
-- [Sequence Diagrams](Sequence-Diagrams.md)
-- [Build & Development](Build-and-Development.md)
+- [Architecture Overview](Architecture)
+- [Sequence Diagrams](Sequence-Diagrams)
+- [Build & Development](Build-and-Development)

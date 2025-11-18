@@ -91,11 +91,11 @@ graph LR
 
 ```mermaid
 graph TD
-    LIGHTING[Scene Lighting] --> AMBIENT[AmbientLight<br/>Color: 0xffffff<br/>Intensity: 0.6]
-    LIGHTING --> DIR[DirectionalLight<br/>Color: 0xffffff<br/>Intensity: 0.8]
+    LIGHTING[Scene Lighting] --> AMBIENT[AmbientLight Color: 0xffffff Intensity: 0.6]
+    LIGHTING --> DIR[DirectionalLight Color: 0xffffff Intensity: 0.8]
 
     DIR --> SHADOW[Shadow Mapping]
-    SHADOW --> CONFIG[Shadow Camera Config<br/>near: 0.1<br/>far: 50<br/>bounds: ±15]
+    SHADOW --> CONFIG[Shadow Camera Config near: 0.1 far: 50 bounds: ±15]
 
     DIR --> POS[Position: 5, 10, 5]
 
@@ -117,14 +117,14 @@ graph TD
 
 ```mermaid
 graph TD
-    BOARD[Game Board] --> MAIN[Main Board<br/>20x1x10 units<br/>Color: 0x8B4513]
-    BOARD --> FRONT[Front Edge<br/>20x2x0.5]
-    BOARD --> BACK[Back Edge<br/>20x2x0.5]
-    BOARD --> LEFT[Left Edge<br/>0.5x2x11]
-    BOARD --> RIGHT[Right Edge<br/>0.5x2x11]
+    BOARD[Game Board] --> MAIN[Main Board 20x1x10 units Color: 0x8B4513]
+    BOARD --> FRONT[Front Edge 20x2x0.5]
+    BOARD --> BACK[Back Edge 20x2x0.5]
+    BOARD --> LEFT[Left Edge 0.5x2x11]
+    BOARD --> RIGHT[Right Edge 0.5x2x11]
 
-    MAIN --> MAT1[PhongMaterial<br/>Specular: 0x222222<br/>Shininess: 10]
-    FRONT --> MAT2[PhongMaterial<br/>Color: 0x654321]
+    MAIN --> MAT1[PhongMaterial Specular: 0x222222 Shininess: 10]
+    FRONT --> MAT2[PhongMaterial Color: 0x654321]
     BACK --> MAT2
     LEFT --> MAT2
     RIGHT --> MAT2
@@ -167,11 +167,11 @@ Y pos: 0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1  0.1
 
 ```mermaid
 flowchart LR
-    CANVAS[Create Canvas<br/>128x128] --> CTX[Get 2D Context]
-    CTX --> DRAW[Draw Number<br/>Font: bold 80px Arial<br/>Color: black]
+    CANVAS[Create Canvas 128x128] --> CTX[Get 2D Context]
+    CTX --> DRAW[Draw Number Font: bold 80px Arial Color: black]
     DRAW --> TEX[Create CanvasTexture]
-    TEX --> PLANE[PlaneGeometry<br/>1.5x1.5]
-    PLANE --> MESH[Mesh on Tile Top<br/>Y+0.11, rotX=-90°]
+    TEX --> PLANE[PlaneGeometry 1.5x1.5]
+    PLANE --> MESH[Mesh on Tile Top Y+0.11, rotX=-90°]
 
     style CANVAS fill:#fff
     style TEX fill:#87ceeb
@@ -227,7 +227,7 @@ stateDiagram-v2
 
 ```mermaid
 graph TD
-    DIE[Die Object] --> GEO[BoxGeometry<br/>1.5x1.5x1.5]
+    DIE[Die Object] --> GEO[BoxGeometry 1.5x1.5x1.5]
     DIE --> MAT[6 Face Materials]
     DIE --> DATA[userData]
 
@@ -238,7 +238,7 @@ graph TD
     MAT --> F5[Front Face]
     MAT --> F6[Back Face]
 
-    F1 --> PIP1[Canvas Texture<br/>White + Black Pips]
+    F1 --> PIP1[Canvas Texture White + Black Pips]
     F2 --> PIP2[Canvas Texture]
     F3 --> PIP3[Canvas Texture]
     F4 --> PIP4[Canvas Texture]
@@ -258,13 +258,13 @@ graph TD
 
 ```mermaid
 flowchart TD
-    START[paintDieFaces<br/>target_value] --> OPPOSITE[Calculate Opposite<br/>opposite = 7 - target]
-    OPPOSITE --> REMAIN[Get Remaining Values<br/>filter out target & opposite]
-    REMAIN --> RAND_FRONT[Random Front Value<br/>from remaining]
-    RAND_FRONT --> CALC_BACK[Calculate Back<br/>back = 7 - front]
-    CALC_BACK --> FINAL[Remaining 2 Values<br/>for Right & Left]
-    FINAL --> ASSIGN[Assign Face Array<br/>[R,L,T,B,F,K]]
-    ASSIGN --> RENDER[Render Each Face<br/>Canvas + Pips]
+    START[paintDieFaces target_value] --> OPPOSITE[Calculate Opposite opposite = 7 - target]
+    OPPOSITE --> REMAIN[Get Remaining Values filter out target & opposite]
+    REMAIN --> RAND_FRONT[Random Front Value from remaining]
+    RAND_FRONT --> CALC_BACK[Calculate Back back = 7 - front]
+    CALC_BACK --> FINAL[Remaining 2 Values for Right & Left]
+    FINAL --> ASSIGN[Assign Face Array [R,L,T,B,F,K]]
+    ASSIGN --> RENDER[Render Each Face Canvas + Pips]
     RENDER --> UPDATE[Update Die Materials]
 
     style START fill:#87ceeb
@@ -286,11 +286,11 @@ graph TD
     PIPS[drawPips value] --> CHECK{value}
 
     CHECK -->|1| ONE[Center Pip]
-    CHECK -->|2| TWO[Diagonal Pips<br/>TL to BR]
+    CHECK -->|2| TWO[Diagonal Pips TL to BR]
     CHECK -->|3| THREE[Diagonal + Center]
     CHECK -->|4| FOUR[Four Corners]
     CHECK -->|5| FIVE[Four Corners + Center]
-    CHECK -->|6| SIX[Two Columns<br/>3 pips each]
+    CHECK -->|6| SIX[Two Columns 3 pips each]
 
     style ONE fill:#fff
     style TWO fill:#fff
@@ -316,7 +316,7 @@ graph TD
 
 ```mermaid
 flowchart TD
-    CLICK[Mouse Click] --> NORMALIZE[Normalize Coordinates<br/>-1 to +1 range]
+    CLICK[Mouse Click] --> NORMALIZE[Normalize Coordinates -1 to +1 range]
     NORMALIZE --> RAYCAST[Create Ray from Camera]
     RAYCAST --> INTERSECT[Intersect with Tiles]
     INTERSECT --> HIT{Tile Hit?}
@@ -328,14 +328,14 @@ flowchart TD
     CHECK_UP -->|Yes| CHECK_SUM{Dice Rolled?}
 
     CHECK_SUM -->|No| END
-    CHECK_SUM -->|Yes| TOGGLE{Already<br/>Selected?}
+    CHECK_SUM -->|Yes| TOGGLE{Already Selected?}
 
-    TOGGLE -->|Yes| DESELECT[Remove from Selection<br/>Color: Gold]
-    TOGGLE -->|No| SELECT[Add to Selection<br/>Color: Red]
+    TOGGLE -->|Yes| DESELECT[Remove from Selection Color: Gold]
+    TOGGLE -->|No| SELECT[Add to Selection Color: Red]
 
     DESELECT --> UPDATE[Update Display]
     SELECT --> UPDATE
-    UPDATE --> VALIDATE[Enable/Disable<br/>Submit Button]
+    UPDATE --> VALIDATE[Enable/Disable Submit Button]
 
     style CLICK fill:#61dafb
     style SELECT fill:#ff6b6b
@@ -406,7 +406,7 @@ flowchart TD
     NEXT --> ANIM
 
     ANIM -->|No| FINAL[Set rotation = π]
-    FINAL --> COLOR[Set color to gray<br/>0x555555]
+    FINAL --> COLOR[Set color to gray 0x555555]
     COLOR --> MARK[Mark isUp = false]
 
     style START fill:#61dafb
@@ -440,8 +440,8 @@ flowchart TD
     CHECK -->|No| CLEAR[Clear Message]
     CHECK -->|Yes| CHECK_SCORE{Score = 0?}
 
-    CHECK_SCORE -->|Yes| WIN[Show Victory Message<br/>Color: Green]
-    CHECK_SCORE -->|No| LOSE[Show Game Over Message<br/>Color: Red]
+    CHECK_SCORE -->|Yes| WIN[Show Victory Message Color: Green]
+    CHECK_SCORE -->|No| LOSE[Show Game Over Message Color: Red]
 
     WIN --> DISABLE[Disable Roll & Submit]
     LOSE --> DISABLE
@@ -485,7 +485,7 @@ document.getElementById('submit-btn').disabled =
 ```mermaid
 flowchart LR
     RESIZE[Window Resize Event] --> CALC[Calculate New Aspect Ratio]
-    CALC --> UPDATE_CAM[Update Camera Frustum<br/>left, right, top, bottom]
+    CALC --> UPDATE_CAM[Update Camera Frustum left, right, top, bottom]
     UPDATE_CAM --> PROJ[Update Projection Matrix]
     PROJ --> RENDER[Update Renderer Size]
 
@@ -579,6 +579,6 @@ function isTestEnvironment() {
 ---
 
 **Related Pages:**
-- [Game Logic Details](Game-Logic.md)
-- [Sequence Diagrams](Sequence-Diagrams.md)
-- [Architecture Overview](Architecture.md)
+- [Game Logic Details](Game-Logic)
+- [Sequence Diagrams](Sequence-Diagrams)
+- [Architecture Overview](Architecture)

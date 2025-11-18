@@ -8,20 +8,20 @@ This page provides a comprehensive overview of the Shut the Box system architect
 graph TB
     subgraph "Browser Environment"
         subgraph "Frontend Layer"
-            HTML[index.html<br/>UI Structure]
-            JS[main.js<br/>Three.js Frontend]
-            THREE[Three.js Library<br/>3D Rendering]
+            HTML[index.html UI Structure]
+            JS[main.js Three.js Frontend]
+            THREE[Three.js Library 3D Rendering]
         end
 
         subgraph "WASM Layer"
-            WASM[shut_the_box.wasm<br/>Compiled Game Logic]
-            BINDINGS[WASM Bindings<br/>JS Glue Code]
+            WASM[shut_the_box.wasm Compiled Game Logic]
+            BINDINGS[WASM Bindings JS Glue Code]
         end
     end
 
     subgraph "Build Environment"
-        RUST[src/lib.rs<br/>Rust Game Logic]
-        WPACK[wasm-pack<br/>Build Tool]
+        RUST[src/lib.rs Rust Game Logic]
+        WPACK[wasm-pack Build Tool]
     end
 
     HTML --> JS
@@ -117,18 +117,18 @@ graph LR
 
 ```mermaid
 flowchart TD
-    START([New Game]) --> INIT[Initialize Game State<br/>All tiles up, score=45]
+    START([New Game]) --> INIT[Initialize Game State All tiles up, score=45]
     INIT --> READY[Ready for Roll]
     READY --> ROLL[User Clicks Roll]
     ROLL --> DICE[Generate Dice Values]
-    DICE --> CHECK{Valid Moves<br/>Exist?}
+    DICE --> CHECK{Valid Moves Exist?}
     CHECK -->|No| GAMEOVER[Game Over]
     CHECK -->|Yes| SELECT[User Selects Tiles]
-    SELECT --> VALIDATE{Sum Matches<br/>Dice?}
+    SELECT --> VALIDATE{Sum Matches Dice?}
     VALIDATE -->|No| SELECT
     VALIDATE -->|Yes| FLIP[Flip Tiles Down]
     FLIP --> UPDATE[Update Score]
-    UPDATE --> WIN{All Tiles<br/>Down?}
+    UPDATE --> WIN{All Tiles Down?}
     WIN -->|Yes| VICTORY[Victory! Score=0]
     WIN -->|No| READY
 
@@ -172,11 +172,11 @@ The application uses a **single source of truth** pattern where all game state r
 ```mermaid
 graph TD
     subgraph "JavaScript (View Layer)"
-        VIEW[View State<br/>3D objects, UI elements]
+        VIEW[View State 3D objects, UI elements]
     end
 
     subgraph "Rust (Model Layer)"
-        MODEL[Game State<br/>tiles, dice, score, game_over]
+        MODEL[Game State tiles, dice, score, game_over]
     end
 
     VIEW -->|Query State| MODEL
@@ -344,6 +344,6 @@ Current architecture supports:
 ---
 
 **Related Pages:**
-- [Game Logic Details](Game-Logic.md)
-- [Frontend Implementation](Frontend-3D.md)
-- [Sequence Diagrams](Sequence-Diagrams.md)
+- [Game Logic Details](Game-Logic)
+- [Frontend Implementation](Frontend-3D)
+- [Sequence Diagrams](Sequence-Diagrams)

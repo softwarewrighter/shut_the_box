@@ -250,8 +250,8 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    START([Page Load]) --> INIT[Initialize WASM<br/>& Three.js]
-    INIT --> SPLASH{Test<br/>Environment?}
+    START([Page Load]) --> INIT[Initialize WASM & Three.js]
+    INIT --> SPLASH{Test Environment?}
 
     SPLASH -->|Yes| SKIP[Skip Splash]
     SPLASH -->|No| SHOW[Show Splash Screen]
@@ -261,7 +261,7 @@ flowchart TD
 
     SKIP --> GAME_START[Start New Game]
 
-    GAME_START --> READY[Ready State<br/>Roll button enabled]
+    GAME_START --> READY[Ready State Roll button enabled]
 
     READY --> ROLL[User Rolls Dice]
     ROLL --> GEN[Generate Random Values]
@@ -269,14 +269,14 @@ flowchart TD
     ANIMATE_DICE --> PAINT[Paint Die Faces]
     PAINT --> SET_DICE[Set Dice Values in WASM]
 
-    SET_DICE --> CHECK_MOVES{Valid Moves<br/>Exist?}
+    SET_DICE --> CHECK_MOVES{Valid Moves Exist?}
 
     CHECK_MOVES -->|No| GAME_OVER[Game Over State]
     CHECK_MOVES -->|Yes| SELECT_STATE[Selection State]
 
     SELECT_STATE --> CLICK[User Clicks Tiles]
     CLICK --> TOGGLE[Toggle Selection]
-    TOGGLE --> CHECK_SUM{Sum Matches<br/>Dice?}
+    TOGGLE --> CHECK_SUM{Sum Matches Dice?}
 
     CHECK_SUM -->|No| SELECT_STATE
     CHECK_SUM -->|Yes| ENABLE_SUBMIT[Enable Submit Button]
@@ -287,15 +287,15 @@ flowchart TD
     VALIDATE --> FLIP[Flip Tiles Animation]
     FLIP --> UPDATE_STATE[Update Game State]
 
-    UPDATE_STATE --> CHECK_WIN{All Tiles<br/>Down?}
+    UPDATE_STATE --> CHECK_WIN{All Tiles Down?}
 
-    CHECK_WIN -->|Yes| VICTORY[Victory State<br/>Score = 0]
+    CHECK_WIN -->|Yes| VICTORY[Victory State Score = 0]
     CHECK_WIN -->|No| READY
 
     GAME_OVER --> RESET_WAIT[Wait for Reset]
     VICTORY --> RESET_WAIT
 
-    RESET_WAIT --> RESET{User Clicks<br/>Reset?}
+    RESET_WAIT --> RESET{User Clicks Reset?}
     RESET -->|Yes| GAME_START
     RESET -->|No| RESET_WAIT
 
@@ -314,7 +314,7 @@ flowchart TD
 flowchart TD
     START[has_valid_moves] --> CHECK_SUM{current_sum = 0?}
 
-    CHECK_SUM -->|Yes| RETURN_TRUE[Return true<br/>No validation needed]
+    CHECK_SUM -->|Yes| RETURN_TRUE[Return true No validation needed]
 
     CHECK_SUM -->|No| GET_TILES[Get all tiles still up]
 
@@ -330,7 +330,7 @@ flowchart TD
 
     PAIRS[Check pairs of tiles] --> LOOP2A[For i in tiles]
     LOOP2A --> LOOP2B[For j > i in tiles]
-    LOOP2B --> MATCH2{tiles[i]+tiles[j]<br/>= sum?}
+    LOOP2B --> MATCH2{tiles[i]+tiles[j] = sum?}
     MATCH2 -->|Yes| RETURN_TRUE
     MATCH2 -->|No| NEXT2[Next pair]
     NEXT2 --> MORE2{More pairs?}
@@ -338,14 +338,14 @@ flowchart TD
     MORE2 -->|No| COMBOS
 
     COMBOS[Check 3+ combinations] --> LOOP3[For size = 3 to len]
-    LOOP3 --> RECURSIVE[check_combinations<br/>tiles, size, sum]
+    LOOP3 --> RECURSIVE[check_combinations tiles, size, sum]
 
     RECURSIVE --> RECUR_CHECK{Match found?}
     RECUR_CHECK -->|Yes| RETURN_TRUE
     RECUR_CHECK -->|No| NEXT3[Next size]
     NEXT3 --> MORE3{More sizes?}
     MORE3 -->|Yes| LOOP3
-    MORE3 -->|No| RETURN_FALSE[Return false<br/>No valid moves]
+    MORE3 -->|No| RETURN_FALSE[Return false No valid moves]
 
     style RETURN_TRUE fill:#90ee90
     style RETURN_FALSE fill:#ff6b6b
@@ -358,7 +358,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    START[check_combinations<br/>tiles, size, target] --> BASE1{size = 0?}
+    START[check_combinations tiles, size, target] --> BASE1{size = 0?}
 
     BASE1 -->|Yes| CHECK_TARGET{target = 0?}
     CHECK_TARGET -->|Yes| TRUE1[Return true]
@@ -373,14 +373,14 @@ flowchart TD
     BASE3 -->|No| INCLUDE[Try INCLUDING first tile]
 
     INCLUDE --> CHECK_VAL{tiles[0] ≤ target?}
-    CHECK_VAL -->|Yes| RECUR1[check_combinations<br/>tiles[1..], size-1,<br/>target-tiles[0]]
+    CHECK_VAL -->|Yes| RECUR1[check_combinations tiles[1..], size-1, target-tiles[0]]
     CHECK_VAL -->|No| EXCLUDE
 
     RECUR1 --> RESULT1{Returned true?}
     RESULT1 -->|Yes| TRUE2[Return true]
     RESULT1 -->|No| EXCLUDE
 
-    EXCLUDE[Try EXCLUDING first tile] --> RECUR2[check_combinations<br/>tiles[1..], size,<br/>target]
+    EXCLUDE[Try EXCLUDING first tile] --> RECUR2[check_combinations tiles[1..], size, target]
 
     RECUR2 --> RESULT2[Return result]
 
@@ -510,6 +510,6 @@ sequenceDiagram
 ---
 
 **Related Pages:**
-- [Architecture Overview](Architecture.md)
-- [Game Logic Details](Game-Logic.md)
-- [Frontend Implementation](Frontend-3D.md)
+- [Architecture Overview](Architecture)
+- [Game Logic Details](Game-Logic)
+- [Frontend Implementation](Frontend-3D)

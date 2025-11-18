@@ -44,7 +44,7 @@ flowchart LR
     SRC[src/lib.rs] --> CARGO[cargo build]
     CARGO --> CHECK[Type Checking]
     CHECK --> COMPILE[Compile to Native]
-    COMPILE --> WASM_PACK[wasm-pack build<br/>--target web]
+    COMPILE --> WASM_PACK[wasm-pack build --target web]
 
     WASM_PACK --> OPT[Optimize WASM]
     OPT --> GEN_WASM[Generate .wasm]
@@ -103,7 +103,7 @@ flowchart TD
     BROWSER --> DEVELOP{Developing?}
 
     DEVELOP -->|Yes| EDIT[Edit Code]
-    EDIT --> REBUILD{Changed<br/>Rust?}
+    EDIT --> REBUILD{Changed Rust?}
 
     REBUILD -->|Yes| BUILD
     REBUILD -->|No| REFRESH[Refresh Browser]
@@ -171,9 +171,9 @@ cd www && python -m SimpleHTTPServer 4000
 
 ```mermaid
 graph TD
-    TESTS[Test Suite] --> UNIT[Unit Tests<br/>cargo test]
-    TESTS --> WASM_CHROME[WASM Tests<br/>Chrome Headless]
-    TESTS --> WASM_FF[WASM Tests<br/>Firefox Headless]
+    TESTS[Test Suite] --> UNIT[Unit Tests cargo test]
+    TESTS --> WASM_CHROME[WASM Tests Chrome Headless]
+    TESTS --> WASM_FF[WASM Tests Firefox Headless]
 
     UNIT --> TEST1[Game initialization]
     UNIT --> TEST2[Tile flipping]
@@ -625,6 +625,6 @@ function isTestEnvironment() {
 ---
 
 **Related Pages:**
-- [Architecture Overview](Architecture.md)
-- [Game Logic Details](Game-Logic.md)
-- [Frontend Implementation](Frontend-3D.md)
+- [Architecture Overview](Architecture)
+- [Game Logic Details](Game-Logic)
+- [Frontend Implementation](Frontend-3D)

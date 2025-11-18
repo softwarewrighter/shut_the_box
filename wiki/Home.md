@@ -10,11 +10,11 @@ Shut the Box is a traditional pub game where players roll dice and flip numbered
 
 ## Quick Links
 
-- **[Architecture Overview](Architecture.md)** - System architecture with component diagrams
-- **[Game Logic (Rust/WASM)](Game-Logic.md)** - Core game engine and state management
-- **[3D Frontend (Three.js)](Frontend-3D.md)** - Rendering, animations, and user interaction
-- **[Sequence Diagrams](Sequence-Diagrams.md)** - Interaction flows and game sequences
-- **[Build & Development](Build-and-Development.md)** - Setup, build commands, and testing
+- **[Architecture Overview](Architecture)** - System architecture with component diagrams
+- **[Game Logic (Rust/WASM)](Game-Logic)** - Core game engine and state management
+- **[3D Frontend (Three.js)](Frontend-3D)** - Rendering, animations, and user interaction
+- **[Sequence Diagrams](Sequence-Diagrams)** - Interaction flows and game sequences
+- **[Build & Development](Build-and-Development)** - Setup, build commands, and testing
 
 ## Technology Stack
 
